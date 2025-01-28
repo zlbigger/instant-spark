@@ -1,16 +1,26 @@
 {
   "manifest_version": 3,
   "name": "💡同步到 flomo",
-  "version": "1.0",
-  "description": "一键同步内容到 flomo，让灵感不再溜走",
+  "version": "1.25",
+  "description": "一键同步内容到 flomo，让灵感不再溜走。支持 Twitter 点赞同步，更好的通知反馈，深色主题图标。",
   "permissions": [
     "activeTab",
     "storage",
     "contextMenus",
-    "notifications"
+    "notifications",
+    "scripting"
   ],
   "host_permissions": [
-    "https://*.flomoapp.com/*"
+    "https://*.flomoapp.com/*",
+    "https://twitter.com/*",
+    "https://x.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://twitter.com/*", "https://x.com/*"],
+      "js": ["twitter-content.js"],
+      "css": ["content.css"]
+    }
   ],
   "action": {
     "default_popup": "popup.html",
@@ -28,13 +38,29 @@
     "128": "images/icon128.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module",
+    "persistent": false
   },
-  "content_scripts": [
+  "author": "no",
+  "homepage_url": "https://github.com/no/instant-spark",
+  "minimum_chrome_version": "88",
+  "offline_enabled": true,
+  "update_url": "https://clients2.google.com/service/update2/crx",
+  "version_name": "1.2.0 - 更好的通知反馈",
+  "web_accessible_resources": [
     {
-      "matches": ["<all_urls>"],
-      "css": ["content.css"],
-      "js": ["content.js"]
+      "resources": ["images/*"],
+      "matches": ["https://twitter.com/*", "https://x.com/*"]
     }
-  ]
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+F",
+        "mac": "Command+F"
+      },
+      "description": "打开 flomo 同步设置"
+    }
+  }
 }
